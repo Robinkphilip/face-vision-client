@@ -3,8 +3,9 @@ import React, { useState,useEffect,useRef} from 'react';
 import * as faceapi from 'face-api.js';
 import uploadImg from "../../image/upload.png"
 import {FaceDetection} from '../FaceDetection/FaceDetection';
+import Navbar from '../Navbar/Navbar';
 
-const FaceInputField = ({name}) => {
+const FaceInputField = ({name,entries,handleImage}) => {
 
   const [imageUrl, setImageUrl] = useState('');
   const [faceDetectionData, setFaceDetectionData] = useState('');
@@ -39,7 +40,7 @@ const FaceInputField = ({name}) => {
     setImageUrl("")
   }
   const handleImageUpload = async () => {
-    setCount(count+1);
+   handleImage()
     const image = imageInputRef.current.files[0];
       
     // Convert Blob object to HTMLImageElement
@@ -75,7 +76,10 @@ const FaceInputField = ({name}) => {
     };
  
   return (
-<>
+    <>
+    <Navbar/>
+<div className="container h-96 w-auto items-center m-auto">
+
     <div className="container grid grid-row-2 bg-blue-200 rounded-lg mt-5  ">
     <div className="flex   items-center justify-center">
       <div className="flex items-center justify-center" >
@@ -102,7 +106,7 @@ const FaceInputField = ({name}) => {
       style={{ fontFamily: "Syne Mono" }}
     >
     {`${name},your current entrie count is.....`}
-      <span className="text-black">{count}</span>
+      <span className="text-black">{entries}</span>
     </div>
   
     <button
@@ -142,8 +146,8 @@ const FaceInputField = ({name}) => {
        faceDetectionData={faceDetectionData}
      />}
     </div>
-  </>
-    
+  </div>
+    </>
   );
 };
 export default FaceInputField;

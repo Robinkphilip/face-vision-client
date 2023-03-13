@@ -1,49 +1,54 @@
-import React,{useState} from "react";
-
+import React from "react";
+import { useNavigate } from "react-router";
 import axios from "axios";
+
+
+
 
 import "./styles.css";
 
+const Auth = ({handleChange,formData,loadUser}) => {
+
+  const navigate = useNavigate();
 
 
-const initalState={
-  id:"",
-   name: "",
-  email: "",
-  password: "",
-  confimPassword: "",
-  entries:0
-}
-
-const Auth = () => {
-  const [formData, setFormData] = useState(initalState);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    // console.log(formData);
-  };
 
   const handleSubmitRegister =async (e) => {
     e.preventDefault();
-    const response= await axios.post("http://localhost:4000/auth/register",{
-      email:formData.email,
+  const user = await axios.post("http://localhost:4000/auth/register",{
+    email: formData.email,
     password: formData.password,
     name: formData.name,
-    entries:formData.entries
-    })
-    console.log(response.data);
-  };
-
+    entries: formData.entries
+  });
+  // Verify the user here and set the formData accordingly
+  if (user.data) {
+    // Redirect to the FaceInputField component
+   loadUser(user.data)
+      navigate("/");
+    
+  } else {
+    // Handle error
+    console.log(user.data.error);
+  }
+}
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-  const response =  await axios.post("http://localhost:4000/auth/login",{
+  const user =  await axios.post("http://localhost:4000/auth/login",{
     email:formData.email,
     password: formData.password,
     entries:formData.entries
-   })
-    console.log(response.data);
+   }) 
+    if (user.data.id) {
+      loadUser(user.data)
+      navigate("/");
+    } else {
+      // Handle error
+      console.log(user.data.error);
+    }
   };
+
   return (
     <div className="section">
       <div ame="container  md:w-32 lg:w-48">
@@ -138,17 +143,6 @@ const Auth = () => {
                               name="password"
                               className="form-style"
                               placeholder="Your Password"
-                              autoComplete="off"
-                              onChange={handleChange}
-                            />
-                            <i className="input-icon uil uil-lock-alt"></i>
-                          </div>
-                          <div className="form-group mt-2">
-                            <input
-                              type="password"
-                              name="confimPassword"
-                              className="form-style"
-                              placeholder="Confirm Password"
                               autoComplete="off"
                               onChange={handleChange}
                             />
