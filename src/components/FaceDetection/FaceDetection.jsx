@@ -15,9 +15,11 @@ export const FaceDetection = ({imageUrl,canvasRef,faceDetectionData}) => {
       faceDetectionData.map((detection, i) => (
         <div className='text-black font-medium grid justify-center grid-flow-col gap-4 bg-blue-200  my-3 rounded' key={i}>
         <div> 
-        Age: {
-           Math.round(detection.age)
-
+        Age: { 
+          detection.age <=25 || detection.age <=30  ?
+          Math.round(detection.age)
+          :Math.round(detection.age-10)
+          
         }
         </div> 
         <div>

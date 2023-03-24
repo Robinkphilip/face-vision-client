@@ -2,9 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 
-
-
-
 import "./styles.css";
 
 const Auth = ({handleChange,formData,loadUser}) => {
@@ -38,9 +35,11 @@ const Auth = ({handleChange,formData,loadUser}) => {
   const user =  await axios.post("http://localhost:4000/auth/login",{
     email:formData.email,
     password: formData.password,
-    entries:formData.entries
+    entries:formData.entries,
+    name:formData.name
    }) 
     if (user.data.id) {
+      console.log(user.data)
       loadUser(user.data)
       navigate("/");
     } else {

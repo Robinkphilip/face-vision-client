@@ -31,18 +31,20 @@ const FaceInputField = ({name,entries,handleImage}) => {
   }
   },[faceDetectionData])
 
-   const handleChange=(e)=>{
+   const handleChange=()=>{
+
     const image = imageInputRef.current.files[0];
     setImageUrl(URL.createObjectURL(image));
     
   }
-  const hadleClick=()=>{
+  const handleClick=()=>{
     setImageUrl("")
+    setFaceDetectionData('');
   }
-  const handleImageUpload = async () => {
-   handleImage()
+  const handleImageUpload = async (e) => {
+
     const image = imageInputRef.current.files[0];
-      
+  
     // Convert Blob object to HTMLImageElement
     const imageElement = new Image();
     imageElement.src = URL.createObjectURL(image);
@@ -54,32 +56,32 @@ const FaceInputField = ({name,entries,handleImage}) => {
       .withFaceLandmarks()
       .withFaceExpressions()
       .withAgeAndGender();
+  
     setFaceDetectionData(detections);
-
-      
-        
-    canvasRef.current.innterHtml = faceapi.createCanvasFromMedia(imageElement)
-    faceapi.matchDimensions(canvasRef.current,{
-      width:350,
-      height:400,
-    })
-    const resized =faceapi.resizeResults(detections,{
-      width:350,
-      height:400,
-    })
+  
+    canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(imageElement);
+    faceapi.matchDimensions(canvasRef.current, {
+      width: 350,
+      height: 400,
+    });
+    const resized = faceapi.resizeResults(detections, {
+      width: 350,
+      height: 400,
+    });
     const detectionCanvas = canvasRef.current.getContext('2d');
-     detectionCanvas.lineWidth=4;
-     detectionCanvas.stokeStyle="blue"
-
-     faceapi.draw.drawFaceExpressions(detectionCanvas, resized)
-    faceapi.draw.drawDetections(detectionCanvas, resized)
-    };
+    detectionCanvas.lineWidth = 4;
+    detectionCanvas.strokeStyle = 'blue';
+  
+    handleImage(e);
+    faceapi.draw.drawFaceExpressions(detectionCanvas, resized);
+    faceapi.draw.drawDetections(detectionCanvas, resized);
+  };
+  
  
   return (
     <>
     <Navbar/>
-<div className="container h-96 w-auto items-center m-auto">
-
+  <div className="container h-96 w-auto items-center m-auto">
     <div className="container grid grid-row-2 bg-blue-200 rounded-lg mt-5  ">
     <div className="flex   items-center justify-center">
       <div className="flex items-center justify-center" >
@@ -97,7 +99,7 @@ const FaceInputField = ({name,entries,handleImage}) => {
           style={{ display: "none" }}
           ref={imageInputRef}
           onChange={handleChange}
-          onClick={hadleClick}
+          onClick={handleClick}
         />
       </div>
     </div>

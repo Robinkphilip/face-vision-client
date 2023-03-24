@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import axios from "axios";
 
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes  } from "react-router-dom";
 
 
 import "./App.css";
@@ -43,17 +43,18 @@ export default function App() {
     })
   }
   
-  
 
   
 
-const handleImage=async()=>{
+const handleImage=async(event)=>{
+event.preventDefault();
   const user =  await axios.put("http://localhost:4000/auth/image",{
     id:formData.id
    })
-   console.log(user.data);
+
    if(user.data){
    setFormData({
+    name:formData.name,
     entries:user.data
    })
    }
@@ -65,7 +66,7 @@ const handleImage=async()=>{
       <ParticlesBackground />
       <Router>
         <Routes>
-          <Route path="/auth" element={<Auth handleChange={handleChange}   formData={formData} loadUser={loadUser}/>} />
+          <Route path="/auth" element={<Auth handleChange={handleChange}  formData={formData} loadUser={loadUser}/>} />
            <Route path="/" element={<FaceInputField handleImage={handleImage} name={formData.name} entries={formData.entries}/>} />
         </Routes>
       </Router>
